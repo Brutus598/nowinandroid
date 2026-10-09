@@ -1,0 +1,249 @@
+=== Godot-Setup Fri Oct  9 08:43:23 UTC 2026 ===
+Teste Asset: Godot_v4.3-stable_linux.headless.x86_64.zip
+curl exit code 22 für Godot_v4.3-stable_linux.headless.x86_64.zip
+Teste Asset: Godot_v4.3-stable_linux.x86_64.zip
+downloaded=Godot_v4.3-stable_linux.x86_64.zip
+/tmp/godot:
+total 158368
+drwxr-xr-x  2 runner runner      4096 Oct  9 08:43 .
+drwxrwxrwt 14 root   root        4096 Oct  9 08:43 ..
+-rwxr-xr-x  1 runner runner 111880592 Aug 15  2024 Godot_v4.3-stable_linux.x86_64
+-rw-r--r--  1 runner runner  50276070 Oct  9 08:43 godot.zip
+GODOT_BIN=/tmp/godot/Godot_v4.3-stable_linux.x86_64
+/tmp/godot/Godot_v4.3-stable_linux.x86_64: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 5.15.0, stripped
+	linux-vdso.so.1 (0x00007f6868a07000)
+	librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f68689f0000)
+	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f68689eb000)
+	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f68689e6000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f68688fd000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f6868600000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f6868a09000)
+Selecting previously unselected package libasyncns0:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 203191 files and directories currently installed.)
+Preparing to unpack .../0-libasyncns0_0.8-6build4_amd64.deb ...
+Unpacking libasyncns0:amd64 (0.8-6build4) ...
+Selecting previously unselected package libflac12t64:amd64.
+Preparing to unpack .../1-libflac12t64_1.4.3+ds-2.1ubuntu2_amd64.deb ...
+Unpacking libflac12t64:amd64 (1.4.3+ds-2.1ubuntu2) ...
+Selecting previously unselected package libmp3lame0:amd64.
+Preparing to unpack .../2-libmp3lame0_3.100-6build1_amd64.deb ...
+Unpacking libmp3lame0:amd64 (3.100-6build1) ...
+Selecting previously unselected package libmpg123-0t64:amd64.
+Preparing to unpack .../3-libmpg123-0t64_1.32.5-1ubuntu1.1_amd64.deb ...
+Unpacking libmpg123-0t64:amd64 (1.32.5-1ubuntu1.1) ...
+Selecting previously unselected package libopus0:amd64.
+Preparing to unpack .../4-libopus0_1.4-1build1_amd64.deb ...
+Unpacking libopus0:amd64 (1.4-1build1) ...
+Selecting previously unselected package libvorbisenc2:amd64.
+Preparing to unpack .../5-libvorbisenc2_1.3.7-1build3_amd64.deb ...
+Unpacking libvorbisenc2:amd64 (1.3.7-1build3) ...
+Selecting previously unselected package libsndfile1:amd64.
+Preparing to unpack .../6-libsndfile1_1.2.2-1ubuntu5.24.04.1_amd64.deb ...
+Unpacking libsndfile1:amd64 (1.2.2-1ubuntu5.24.04.1) ...
+Selecting previously unselected package libpulse0:amd64.
+Preparing to unpack .../7-libpulse0_1%3a16.1+dfsg1-2ubuntu10.1_amd64.deb ...
+Unpacking libpulse0:amd64 (1:16.1+dfsg1-2ubuntu10.1) ...
+Setting up libmpg123-0t64:amd64 (1.32.5-1ubuntu1.1) ...
+Setting up libopus0:amd64 (1.4-1build1) ...
+Setting up libasyncns0:amd64 (0.8-6build4) ...
+Setting up libflac12t64:amd64 (1.4.3+ds-2.1ubuntu2) ...
+Setting up libmp3lame0:amd64 (3.100-6build1) ...
+Setting up libvorbisenc2:amd64 (1.3.7-1build3) ...
+Setting up libsndfile1:amd64 (1.2.2-1ubuntu5.24.04.1) ...
+Setting up libpulse0:amd64 (1:16.1+dfsg1-2ubuntu10.1) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+4.3.stable.official.77dcf97d8
+Godot läuft.
+=== Import Fri Oct  9 08:43:34 UTC 2026 ===
+Godot Engine v4.3.stable.official.77dcf97d8 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Could not resolve external class member "get".
+          at: GDScript::reload (res://scripts/autoload/game.gd:79)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:112)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:115)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "d" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/autoload/game.gd:123)
+SCRIPT ERROR: Parse Error: Invalid argument for "log()" function: argument 1 should be "float" but is "String".
+          at: GDScript::reload (res://scripts/autoload/game.gd:170)
+ERROR: Failed to load script "res://scripts/autoload/game.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+ERROR: Failed to create an autoload, script 'res://scripts/autoload/game.gd' is not compiling.
+   at: _create_autoload (editor/editor_autoload_settings.cpp:417)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "get".
+          at: GDScript::reload (res://scripts/autoload/game.gd:79)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:112)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:115)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "d" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/autoload/game.gd:123)
+SCRIPT ERROR: Parse Error: Invalid argument for "log()" function: argument 1 should be "float" but is "String".
+          at: GDScript::reload (res://scripts/autoload/game.gd:170)
+SCRIPT ERROR: Compile Error: 
+          at: GDScript::reload (res://scripts/autoload/ai_advisor.gd:-1)
+ERROR: Failed to load script "res://scripts/autoload/ai_advisor.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "before" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/test/test_runner.gd:32)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "wood_before" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/test/test_runner.gd:89)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "main" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/test/test_runner.gd:154)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "entities" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/test/test_runner.gd:159)
+ERROR: Failed to load script "res://scripts/test/test_runner.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "get".
+          at: GDScript::reload (res://scripts/ui/hud.gd:80)
+ERROR: Failed to load script "res://scripts/ui/hud.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Function "add_child()" not found in base self.
+          at: GDScript::reload (res://scripts/util/fanfare.gd:13)
+ERROR: Failed to load script "res://scripts/util/fanfare.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Invalid argument for "mesh()" function: argument 2 should be "ArrayMesh" but is "BoxMesh".
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:17)
+SCRIPT ERROR: Parse Error: Invalid argument for "mesh()" function: argument 2 should be "ArrayMesh" but is "CylinderMesh".
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:24)
+SCRIPT ERROR: Parse Error: Identifier "ConeMesh" not declared in the current scope.
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:27)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "m" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:27)
+SCRIPT ERROR: Parse Error: Invalid argument for "mesh()" function: argument 2 should be "ArrayMesh" but is "SphereMesh".
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:35)
+SCRIPT ERROR: Parse Error: Invalid argument for "mesh()" function: argument 2 should be "ArrayMesh" but is "PrismMesh".
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:40)
+ERROR: Failed to load script "res://scripts/util/proc_3d.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "get".
+          at: GDScript::reload (res://scripts/building.gd:20)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "mat" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/building.gd:76)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "c" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/building.gd:79)
+ERROR: Failed to load script "res://scripts/building.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: The function signature doesn't match the parent. Parent signature is "get(StringName) -> Variant".
+          at: GDScript::reload (res://scripts/building_defs.gd:46)
+SCRIPT ERROR: Parse Error: The method "get()" overrides a method from native class "Object". This won't be called by the engine and may not work as expected. (Warning treated as error.)
+          at: GDScript::reload (res://scripts/building_defs.gd:46)
+ERROR: Failed to load script "res://scripts/building_defs.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "delta_v" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/camera_controller.gd:77)
+ERROR: Failed to load script "res://scripts/camera_controller.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Invalid argument for "mesh()" function: argument 2 should be "ArrayMesh" but is "BoxMesh".
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:17)
+SCRIPT ERROR: Parse Error: Invalid argument for "mesh()" function: argument 2 should be "ArrayMesh" but is "CylinderMesh".
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:24)
+SCRIPT ERROR: Parse Error: Identifier "ConeMesh" not declared in the current scope.
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:27)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "m" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:27)
+SCRIPT ERROR: Parse Error: Invalid argument for "mesh()" function: argument 2 should be "ArrayMesh" but is "SphereMesh".
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:35)
+SCRIPT ERROR: Parse Error: Invalid argument for "mesh()" function: argument 2 should be "ArrayMesh" but is "PrismMesh".
+          at: GDScript::reload (res://scripts/util/proc_3d.gd:40)
+SCRIPT ERROR: Compile Error: 
+          at: GDScript::reload (res://scripts/resource_node.gd:-1)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "get".
+          at: GDScript::reload (res://scripts/building.gd:20)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "mat" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/building.gd:76)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "c" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/building.gd:79)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "get".
+          at: GDScript::reload (res://scripts/autoload/game.gd:79)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:112)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:115)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "d" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/autoload/game.gd:123)
+SCRIPT ERROR: Parse Error: Invalid argument for "log()" function: argument 1 should be "float" but is "String".
+          at: GDScript::reload (res://scripts/autoload/game.gd:170)
+SCRIPT ERROR: Compile Error: 
+          at: GDScript::reload (res://scripts/villager.gd:-1)
+ERROR: Failed to load script "res://scripts/villager.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Invalid argument for "add_child()" function: argument 1 should be "Node" but is "Fanfare".
+          at: GDScript::reload (res://scripts/main.gd:19)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "get".
+          at: GDScript::reload (res://scripts/main.gd:227)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "d" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/main.gd:252)
+ERROR: Failed to load script "res://scripts/main.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "x" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/world_gen.gd:42)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "angle" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/world_gen.gd:102)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "dist" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/world_gen.gd:103)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "radius" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/world_gen.gd:105)
+SCRIPT ERROR: Parse Error: Identifier "ConeMesh" not declared in the current scope.
+          at: GDScript::reload (res://scripts/world_gen.gd:106)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "cone" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/world_gen.gd:106)
+SCRIPT ERROR: Parse Error: Invalid argument for "mesh()" function: argument 2 should be "ArrayMesh" but is "PlaneMesh".
+          at: GDScript::reload (res://scripts/world_gen.gd:189)
+ERROR: Failed to load script "res://scripts/world_gen.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+ERROR: Cannot get class 'PlaneShape3D'.
+   at: _instantiate_internal (core/object/class_db.cpp:515)
+Import OK
+=== Test-Harness Fri Oct  9 08:43:41 UTC 2026 ===
+Godot Engine v4.3.stable.official.77dcf97d8 - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Could not resolve external class member "get".
+          at: GDScript::reload (res://scripts/autoload/game.gd:79)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:112)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:115)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "d" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/autoload/game.gd:123)
+SCRIPT ERROR: Parse Error: Invalid argument for "log()" function: argument 1 should be "float" but is "String".
+          at: GDScript::reload (res://scripts/autoload/game.gd:170)
+ERROR: Failed to load script "res://scripts/autoload/game.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+ERROR: Failed to instantiate an autoload, script 'res://scripts/autoload/game.gd' does not inherit from 'Node'.
+   at: start (main/main.cpp:3678)
+SCRIPT ERROR: Parse Error: Could not resolve external class member "get".
+          at: GDScript::reload (res://scripts/autoload/game.gd:79)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:112)
+SCRIPT ERROR: Parse Error: Identifier "_droffs" not declared in the current scope.
+          at: GDScript::reload (res://scripts/autoload/game.gd:115)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "d" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/autoload/game.gd:123)
+SCRIPT ERROR: Parse Error: Invalid argument for "log()" function: argument 1 should be "float" but is "String".
+          at: GDScript::reload (res://scripts/autoload/game.gd:170)
+SCRIPT ERROR: Compile Error: 
+          at: GDScript::reload (res://scripts/autoload/ai_advisor.gd:-1)
+ERROR: Failed to load script "res://scripts/autoload/ai_advisor.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript.cpp:2936)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "before" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/test/test_runner.gd:32)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "wood_before" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/test/test_runner.gd:89)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "main" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/test/test_runner.gd:154)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "entities" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://scripts/test/test_runner.gd:159)
+ERROR: Failed to load script "res://scripts/test/test_runner.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript.cpp:2936)
