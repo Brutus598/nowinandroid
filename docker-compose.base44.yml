@@ -4,9 +4,9 @@
 # interactively in a web browser, so the preview shows the app's Roborazzi
 # screenshot tests in a gallery on port 3000.
 #
-# The demoDebug APK is built separately (one-shot, not part of the long-running
-# stack) to avoid the platform flagging an exited service:
-#   docker compose -f docker-compose.base44.yml run --rm build
+# The demoDebug APK was built separately from source using Dockerfile.base44.
+# It is intentionally not defined as a service here: completed build jobs exit
+# successfully, while this compose stack is reserved for the live preview.
 #
 # Usage:  docker compose -f docker-compose.base44.yml up -d
 
@@ -31,30 +31,3 @@ services:
       start_period: 5s
     restart: on-failure
 
-  # --- One-shot APK build (demoDebug) — run manually, not on `up` ----------
-  # To build the APK:  docker compose -f docker-compose.base44.yml run --rm build
-  build:
-    build:
-      context: .
-      dockerfile: Dockerfile.base44
-    profiles: ["build"]
-    volumes:
-      - ./:/app
-      - gradle-cache:/root/.gradle
-    working_dir: /app
-    command:
-      - sh
-      - -ec
-      - |
-        echo "sdk.dir=/opt/android-sdk" > local.properties
-        mkdir -p ~/.gradle
-        printf 'org.gradle.jvmargs=-Xmx2g -Xms512m -Dfile.encoding=UTF-8 -XX:+UseG1GC\norg.gradle.daemon=false\norg.gradle.parallel=true\norg.gradle.workers.max=2\norg.gradle.configuration-cache=false\norg.gradle.isolated-projects=false\nkotlin.incremental=false\n' > ~/.gradle/gradle.properties
-        exec ./gradlew assembleDemoDebug --no-daemon --stacktrace
-    environment:
-      - ANDROID_HOME=/opt/android-sdk
-      - ANDROID_SDK_ROOT=/opt/android-sdk
-      - BASE44_PREVIEW_MODE
-    restart: "no"
-
-volumes:
-  gradle-cache:

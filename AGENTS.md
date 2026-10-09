@@ -71,8 +71,7 @@ sandbox (`docker-compose.base44.yml`) provides two services:
 No external credentials are needed — the `demo` flavor uses static local data. The `prod`
 flavor would need a backend server (not publicly available) and Firebase config.
 
-To rebuild the APK after code changes:
-`docker compose -f docker-compose.base44.yml run --rm build`
-(The build service uses a compose profile so it doesn't start on `up` — only the `web` service
-runs continuously.) The Gradle cache is persisted in a named volume (`gradle-cache`) to speed
-up rebuilds.
+`Dockerfile.base44` is the reproducible JDK 21 + Android SDK 36 build environment used to
+produce the demo APK. It is intentionally not included in `docker-compose.base44.yml`, which
+contains only the long-running, health-checked preview service; completed build jobs must not
+be modelled as preview services.
