@@ -4,6 +4,9 @@ name: "Viking Village – Test, Build & Release"
 # 1. Test-Job: führt den headless-Test-Harness des Spiels aus
 # 2. Build-Job: exportiert Linux-Build + Android-APK und veröffentlicht ein GitHub-Release
 # 3. AI-Smoke-Job: prüft die GitHub Models Responses API (models.github.ai)
+#
+# Hinweis: CI-Logs werden zusätzlich als viking-village/ci-debug.log in den Branch
+# committed (mit [skip ci]), damit Fehler analysierbar sind.
 
 on:
   push:
@@ -20,7 +23,9 @@ permissions:
 
 env:
   GODOT_VERSION: "4.3-stable"
+  GODOT_VERSION_CONFIG: "4.3.stable" # Ordnername, den der Editor für Export-Templates erwartet
   GODOT_DIR: "/tmp/godot"
+  DEBUG_LOG: "viking-village/ci-debug.log"
 
 jobs:
   test:
@@ -31,35 +36,72 @@ jobs:
       - name: Repository auschecken
         uses: actions/checkout@v4
 
-      - name: Godot (headless) herunterladen
+      - name: Godot herunterladen und prüfen
         run: |
           set -e
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          mkdir -p "$(dirname "$LOG")"
+          echo "=== Godot-Setup $(date -u) ===" >> "$LOG"
           mkdir -p "$GODOT_DIR"
           downloaded=""
           for asset in "Godot_v${GODOT_VERSION}_linux.headless.x86_64.zip" "Godot_v${GODOT_VERSION}_linux.x86_64.zip"; do
+            echo "Teste Asset: $asset" >> "$LOG"
             if curl -fsSL -o "$GODOT_DIR/godot.zip" "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/${asset}"; then
-              echo "Nutze Asset: $asset"
               downloaded="$asset"
               break
+            else
+              echo "curl exit code $? für $asset" >> "$LOG"
             fi
           done
+          echo "downloaded=$downloaded" >> "$LOG"
           if [ -z "$downloaded" ]; then
-            echo "Kein Godot-Download gefunden!" >&2
+            echo "FEHLER: kein Godot-Asset gefunden" >> "$LOG"
             exit 1
           fi
-          unzip -q -o "$GODOT_DIR/godot.zip" -d "$GODOT_DIR"
-          find "$GODOT_DIR" -maxdepth 1 -type f -name "Godot*" -exec chmod +x {} \;
-          echo "GODOT_BIN=$(find "$GODOT_DIR" -maxdepth 1 -type f -name 'Godot*' | head -1)" >> "$GITHUB_ENV"
-          "$GODOT_BIN" --version
+          unzip -q -o "$GODOT_DIR/godot.zip" -d "$GODOT_DIR" || echo "unzip exit code: $?" >> "$LOG"
+          ls -laR "$GODOT_DIR" >> "$LOG" 2>&1 || true
+          GODOT_BIN=$(find "$GODOT_DIR" -type f -name "Godot*" | head -1)
+          echo "GODOT_BIN=$GODOT_BIN" >> "$LOG"
+          if [ -z "$GODOT_BIN" ]; then
+            echo "FEHLER: Godot-Binary nicht gefunden" >> "$LOG"
+            exit 1
+          fi
+          chmod +x "$GODOT_BIN"
+          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+          file "$GODOT_BIN" >> "$LOG" 2>&1 || true
+          ldd "$GODOT_BIN" >> "$LOG" 2>&1 || true
+          # Laufzeit-Bibliotheken (falls im Runner-Image fehlen)
+          sudo apt-get update -qq >> "$LOG" 2>&1 || true
+          sudo apt-get install -y -qq libgl1 libx11-6 libxcursor1 libxinerama1 libxi6 libxrandr2 libxrender1 libasound2t64 libpulse0 libudev1 libdbus-1-3 libxkbcommon0 libwayland-client0 >> "$LOG" 2>&1 || true
+          if ! "$GODOT_BIN" --version >> "$LOG" 2>&1; then
+            echo "FEHLER: Godot --version fehlgeschlagen (exit $?)" >> "$LOG"
+            exit 1
+          fi
+          echo "Godot läuft." >> "$LOG"
 
       - name: Projekt importieren (Parser-/Syntax-Check)
         run: |
-          "$GODOT_BIN" --headless --path viking-village --editor --quit --import
-          echo "Import OK"
+          set -e
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          echo "=== Import $(date -u) ===" >> "$LOG"
+          "$GODOT_BIN" --headless --path viking-village --editor --quit --import 2>&1 | tee -a "$LOG"
+          echo "Import OK" | tee -a "$LOG"
 
       - name: Test-Harness ausführen
         run: |
-          "$GODOT_BIN" --headless --path viking-village res://scenes/test/test_runner.tscn --quit-after 300
+          set -o pipefail
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          echo "=== Test-Harness $(date -u) ===" >> "$LOG"
+          "$GODOT_BIN" --headless --path viking-village res://scenes/test/test_runner.tscn --quit-after 300 2>&1 | tee -a "$LOG"
+
+      - name: Debug-Log committen
+        if: always()
+        run: |
+          git config user.name "arena-ci"
+          git config user.email "arena-ci@localhost"
+          git add "$DEBUG_LOG" 2>/dev/null || true
+          git commit -q -m "ci: debug log [skip ci]" || true
+          git push origin "HEAD:arena/69a464d1-nowinandroid" 2>&1 | tail -2 || true
 
   build:
     name: "Builds erzeugen (Linux + Android APK)"
@@ -70,71 +112,109 @@ jobs:
       - name: Repository auschecken
         uses: actions/checkout@v4
 
-      - name: Godot (headless) herunterladen
+      - name: Godot herunterladen und prüfen
         run: |
           set -e
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          mkdir -p "$(dirname "$LOG")"
+          echo "=== Godot-Setup (build) $(date -u) ===" >> "$LOG"
           mkdir -p "$GODOT_DIR"
           downloaded=""
           for asset in "Godot_v${GODOT_VERSION}_linux.headless.x86_64.zip" "Godot_v${GODOT_VERSION}_linux.x86_64.zip"; do
+            echo "Teste Asset: $asset" >> "$LOG"
             if curl -fsSL -o "$GODOT_DIR/godot.zip" "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/${asset}"; then
-              echo "Nutze Asset: $asset"
               downloaded="$asset"
               break
+            else
+              echo "curl exit code $? für $asset" >> "$LOG"
             fi
           done
+          echo "downloaded=$downloaded" >> "$LOG"
           if [ -z "$downloaded" ]; then
-            echo "Kein Godot-Download gefunden!" >&2
+            echo "FEHLER: kein Godot-Asset gefunden" >> "$LOG"
             exit 1
           fi
-          unzip -q -o "$GODOT_DIR/godot.zip" -d "$GODOT_DIR"
-          find "$GODOT_DIR" -maxdepth 1 -type f -name "Godot*" -exec chmod +x {} \;
-          echo "GODOT_BIN=$(find "$GODOT_DIR" -maxdepth 1 -type f -name 'Godot*' | head -1)" >> "$GITHUB_ENV"
-          "$GODOT_BIN" --version
+          unzip -q -o "$GODOT_DIR/godot.zip" -d "$GODOT_DIR" || echo "unzip exit code: $?" >> "$LOG"
+          ls -laR "$GODOT_DIR" >> "$LOG" 2>&1 || true
+          GODOT_BIN=$(find "$GODOT_DIR" -type f -name "Godot*" | head -1)
+          echo "GODOT_BIN=$GODOT_BIN" >> "$LOG"
+          if [ -z "$GODOT_BIN" ]; then
+            echo "FEHLER: Godot-Binary nicht gefunden" >> "$LOG"
+            exit 1
+          fi
+          chmod +x "$GODOT_BIN"
+          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+          file "$GODOT_BIN" >> "$LOG" 2>&1 || true
+          ldd "$GODOT_BIN" >> "$LOG" 2>&1 || true
+          sudo apt-get update -qq >> "$LOG" 2>&1 || true
+          sudo apt-get install -y -qq libgl1 libx11-6 libxcursor1 libxinerama1 libxi6 libxrandr2 libxrender1 libasound2t64 libpulse0 libudev1 libdbus-1-3 libxkbcommon0 libwayland-client0 >> "$LOG" 2>&1 || true
+          if ! "$GODOT_BIN" --version >> "$LOG" 2>&1; then
+            echo "FEHLER: Godot --version fehlgeschlagen (exit $?)" >> "$LOG"
+            exit 1
+          fi
+          echo "Godot läuft." >> "$LOG"
 
       - name: Export-Templates installieren
         run: |
           set -e
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          echo "=== Templates $(date -u) ===" >> "$LOG"
           TPZ="Godot_v${GODOT_VERSION}_export_templates.tpz"
           curl -fsSL -o /tmp/templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/${TPZ}"
           TPL_DIR="$HOME/.local/share/godot/export_templates"
           TMP_TPL=$(mktemp -d)
           unzip -q -o /tmp/templates.tpz -d "$TMP_TPL"
-          # Quellverzeichnis = Verzeichnis, das die version.txt enthält
           SRC_DIR=$(dirname "$(find "$TMP_TPL" -name version.txt | head -1)")
-          echo "Template-Quelle: $SRC_DIR"
+          echo "Template-Quelle: $SRC_DIR" >> "$LOG"
           mkdir -p "$TPL_DIR/${GODOT_VERSION_CONFIG}"
           cp -r "$SRC_DIR"/. "$TPL_DIR/${GODOT_VERSION_CONFIG}/"
-          ls -la "$TPL_DIR/${GODOT_VERSION_CONFIG}/"
+          ls -la "$TPL_DIR/${GODOT_VERSION_CONFIG}/" | tee -a "$LOG"
 
       - name: Debug-Keystore erzeugen (nur für CI, nicht eingecheckt)
         run: |
+          set -e
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          echo "=== Keystore $(date -u) ===" >> "$LOG"
           mkdir -p viking-village/keystore
           keytool -genkeypair -keystore viking-village/keystore/debug.keystore -storetype PKCS12 \
             -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 \
-            -storepass android -keypass android -dname "CN=Nordheim, OU=Arena, O=Arena, C=DE"
+            -storepass android -keypass android -dname "CN=Nordheim, OU=Arena, O=Arena, C=DE" 2>&1 | tee -a "$LOG"
 
       - name: Projekt importieren
         run: |
-          "$GODOT_BIN" --headless --path viking-village --editor --quit --import
+          set -o pipefail
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          echo "=== Import (build) $(date -u) ===" >> "$LOG"
+          "$GODOT_BIN" --headless --path viking-village --editor --quit --import 2>&1 | tee -a "$LOG"
 
       - name: Android-APK exportieren
         run: |
-          "$GODOT_BIN" --headless --path viking-village --export-release "Android"
+          set -o pipefail
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          echo "=== Android-Export $(date -u) ===" >> "$LOG"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$LOG"
+          ls "$ANDROID_HOME" >> "$LOG" 2>&1 || true
+          "$GODOT_BIN" --headless --path viking-village --export-release "Android" 2>&1 | tee -a "$LOG"
 
       - name: Linux-Build exportieren
         run: |
-          "$GODOT_BIN" --headless --path viking-village --export-release "Linux"
+          set -o pipefail
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          echo "=== Linux-Export $(date -u) ===" >> "$LOG"
+          "$GODOT_BIN" --headless --path viking-village --export-release "Linux" 2>&1 | tee -a "$LOG"
 
       - name: Artefakte vorbereiten
         run: |
           set -e
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          echo "=== Artefakte $(date -u) ===" >> "$LOG"
           cd viking-village/builds
-          ls -laR .
+          ls -laR . | tee -a "$LOG"
           (cd linux && zip -q -r ../Nordheim-Linux-x86_64.zip .)
           mkdir -p release
           cp android/Nordheim.apk release/Nordheim-v1.0.0.apk
           cp Nordheim-Linux-x86_64.zip release/
-          ls -la release/
+          ls -la release/ | tee -a "$LOG"
 
       - name: Artefakte als Workflow-Artefakt hochladen
         uses: actions/upload-artifact@v4
@@ -150,6 +230,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
+          LOG="$GITHUB_WORKSPACE/$DEBUG_LOG"
+          echo "=== Release $(date -u) ===" >> "$LOG"
           TAG="nordheim-v1.0.0"
           NOTES_FILE=$(mktemp)
           cat > "$NOTES_FILE" <<'EOF'
@@ -166,16 +248,25 @@ jobs:
           Automatisch gebaut aus dem Branch `arena/69a464d1-nowinandroid`.
           EOF
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Release $TAG existiert bereits – lade Assets hoch."
-            gh release upload "$TAG" viking-village/builds/release/Nordheim-v1.0.0.apk viking-village/builds/release/Nordheim-Linux-x86_64.zip --clobber
+            echo "Release $TAG existiert bereits – lade Assets hoch." | tee -a "$LOG"
+            gh release upload "$TAG" viking-village/builds/release/Nordheim-v1.0.0.apk viking-village/builds/release/Nordheim-Linux-x86_64.zip --clobber 2>&1 | tee -a "$LOG"
           else
             gh release create "$TAG" \
               viking-village/builds/release/Nordheim-v1.0.0.apk \
               viking-village/builds/release/Nordheim-Linux-x86_64.zip \
               --title "Nordheim v1.0.0 – Wikinger-Dorf (Android APK & Linux)" \
-              --notes-file "$NOTES_FILE"
+              --notes-file "$NOTES_FILE" 2>&1 | tee -a "$LOG"
           fi
-          gh release view "$TAG" --json assets --jq '.assets[] | {name, size}'
+          gh release view "$TAG" --json assets --jq '.assets[] | {name, size}' | tee -a "$LOG"
+
+      - name: Debug-Log committen
+        if: always()
+        run: |
+          git config user.name "arena-ci"
+          git config user.email "arena-ci@localhost"
+          git add "$DEBUG_LOG" 2>/dev/null || true
+          git commit -q -m "ci: debug log [skip ci]" || true
+          git push origin "HEAD:arena/69a464d1-nowinandroid" 2>&1 | tail -2 || true
 
   ai-smoke:
     name: "GitHub Models Responses API testen"
