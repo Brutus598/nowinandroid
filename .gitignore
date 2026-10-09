@@ -47,3 +47,9 @@ captures/
 
 # Kotlin
 .kotlin
+
+# Viking Village (Godot-Spiel) – Build-Artefakte & lokale Dateien
+viking-village/builds/
+viking-village/.godot/
+viking-village/keystore/
+viking-village/addons/

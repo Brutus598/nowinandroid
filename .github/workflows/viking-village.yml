@@ -1,0 +1,197 @@
+name: "Viking Village – Test, Build & Release"
+
+# Baut das Wikinger-Dorfspiel „Nordheim“ (Godot 4.3):
+# 1. Test-Job: führt den headless-Test-Harness des Spiels aus
+# 2. Build-Job: exportiert Linux-Build + Android-APK und veröffentlicht ein GitHub-Release
+# 3. AI-Smoke-Job: prüft die GitHub Models Responses API (models.github.ai)
+
+on:
+  push:
+    branches:
+      - arena/69a464d1-nowinandroid
+    paths:
+      - "viking-village/**"
+      - ".github/workflows/viking-village.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  models: read
+
+env:
+  GODOT_VERSION: "4.3-stable"
+  GODOT_DIR: "/tmp/godot"
+
+jobs:
+  test:
+    name: "Spiel-Logik testen (headless)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Godot (headless) herunterladen
+        run: |
+          set -e
+          mkdir -p "$GODOT_DIR"
+          downloaded=""
+          for asset in "Godot_v${GODOT_VERSION}_linux.headless.x86_64.zip" "Godot_v${GODOT_VERSION}_linux.x86_64.zip"; do
+            if curl -fsSL -o "$GODOT_DIR/godot.zip" "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/${asset}"; then
+              echo "Nutze Asset: $asset"
+              downloaded="$asset"
+              break
+            fi
+          done
+          if [ -z "$downloaded" ]; then
+            echo "Kein Godot-Download gefunden!" >&2
+            exit 1
+          fi
+          unzip -q -o "$GODOT_DIR/godot.zip" -d "$GODOT_DIR"
+          find "$GODOT_DIR" -maxdepth 1 -type f -name "Godot*" -exec chmod +x {} \;
+          echo "GODOT_BIN=$(find "$GODOT_DIR" -maxdepth 1 -type f -name 'Godot*' | head -1)" >> "$GITHUB_ENV"
+          "$GODOT_BIN" --version
+
+      - name: Projekt importieren (Parser-/Syntax-Check)
+        run: |
+          "$GODOT_BIN" --headless --path viking-village --editor --quit --import
+          echo "Import OK"
+
+      - name: Test-Harness ausführen
+        run: |
+          "$GODOT_BIN" --headless --path viking-village res://scenes/test/test_runner.tscn --quit-after 300
+
+  build:
+    name: "Builds erzeugen (Linux + Android APK)"
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 30
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Godot (headless) herunterladen
+        run: |
+          set -e
+          mkdir -p "$GODOT_DIR"
+          downloaded=""
+          for asset in "Godot_v${GODOT_VERSION}_linux.headless.x86_64.zip" "Godot_v${GODOT_VERSION}_linux.x86_64.zip"; do
+            if curl -fsSL -o "$GODOT_DIR/godot.zip" "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/${asset}"; then
+              echo "Nutze Asset: $asset"
+              downloaded="$asset"
+              break
+            fi
+          done
+          if [ -z "$downloaded" ]; then
+            echo "Kein Godot-Download gefunden!" >&2
+            exit 1
+          fi
+          unzip -q -o "$GODOT_DIR/godot.zip" -d "$GODOT_DIR"
+          find "$GODOT_DIR" -maxdepth 1 -type f -name "Godot*" -exec chmod +x {} \;
+          echo "GODOT_BIN=$(find "$GODOT_DIR" -maxdepth 1 -type f -name 'Godot*' | head -1)" >> "$GITHUB_ENV"
+          "$GODOT_BIN" --version
+
+      - name: Export-Templates installieren
+        run: |
+          set -e
+          TPZ="Godot_v${GODOT_VERSION}_export_templates.tpz"
+          curl -fsSL -o /tmp/templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/${TPZ}"
+          TPL_DIR="$HOME/.local/share/godot/export_templates"
+          TMP_TPL=$(mktemp -d)
+          unzip -q -o /tmp/templates.tpz -d "$TMP_TPL"
+          # Quellverzeichnis = Verzeichnis, das die version.txt enthält
+          SRC_DIR=$(dirname "$(find "$TMP_TPL" -name version.txt | head -1)")
+          echo "Template-Quelle: $SRC_DIR"
+          mkdir -p "$TPL_DIR/${GODOT_VERSION_CONFIG}"
+          cp -r "$SRC_DIR"/. "$TPL_DIR/${GODOT_VERSION_CONFIG}/"
+          ls -la "$TPL_DIR/${GODOT_VERSION_CONFIG}/"
+
+      - name: Debug-Keystore erzeugen (nur für CI, nicht eingecheckt)
+        run: |
+          mkdir -p viking-village/keystore
+          keytool -genkeypair -keystore viking-village/keystore/debug.keystore -storetype PKCS12 \
+            -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass android -keypass android -dname "CN=Nordheim, OU=Arena, O=Arena, C=DE"
+
+      - name: Projekt importieren
+        run: |
+          "$GODOT_BIN" --headless --path viking-village --editor --quit --import
+
+      - name: Android-APK exportieren
+        run: |
+          "$GODOT_BIN" --headless --path viking-village --export-release "Android"
+
+      - name: Linux-Build exportieren
+        run: |
+          "$GODOT_BIN" --headless --path viking-village --export-release "Linux"
+
+      - name: Artefakte vorbereiten
+        run: |
+          set -e
+          cd viking-village/builds
+          ls -laR .
+          (cd linux && zip -q -r ../Nordheim-Linux-x86_64.zip .)
+          mkdir -p release
+          cp android/Nordheim.apk release/Nordheim-v1.0.0.apk
+          cp Nordheim-Linux-x86_64.zip release/
+          ls -la release/
+
+      - name: Artefakte als Workflow-Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: nordheim-builds
+          path: |
+            viking-village/builds/release/Nordheim-v1.0.0.apk
+            viking-village/builds/release/Nordheim-Linux-x86_64.zip
+          if-no-files-found: error
+
+      - name: GitHub-Release erstellen bzw. aktualisieren
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG="nordheim-v1.0.0"
+          NOTES_FILE=$(mktemp)
+          cat > "$NOTES_FILE" <<'EOF'
+          ## Nordheim – Wikinger-Dorf v1.0.0
+
+          Ein komplett neues 3D-Dorfspiel im Wikinger-Stil (Godot 4.3), inspiriert von Age of Empires:
+
+          - **Android:** `Nordheim-v1.0.0.apk` herunterladen und installieren (arm64 & x86_64)
+          - **Linux:** `Nordheim-Linux-x86_64.zip` entpacken und starten
+          - **Ressourcen:** Holz, Essen, Gold, Stein, Metall und Ölstein
+          - **Steuerung:** Linksklick = wählen/befehlen · Rechte Maustaste = Kamera drehen · Mausrad = Zoom · WASD = scrollen · Touch: 1 Finger = bewegen, 2 Finger = zoomen/drehen
+          - **KI-Berater:** „Sigrid die Seherin“ antwortet über die GitHub Models Responses API (optional Token im Spiel eintragen)
+
+          Automatisch gebaut aus dem Branch `arena/69a464d1-nowinandroid`.
+          EOF
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG existiert bereits – lade Assets hoch."
+            gh release upload "$TAG" viking-village/builds/release/Nordheim-v1.0.0.apk viking-village/builds/release/Nordheim-Linux-x86_64.zip --clobber
+          else
+            gh release create "$TAG" \
+              viking-village/builds/release/Nordheim-v1.0.0.apk \
+              viking-village/builds/release/Nordheim-Linux-x86_64.zip \
+              --title "Nordheim v1.0.0 – Wikinger-Dorf (Android APK & Linux)" \
+              --notes-file "$NOTES_FILE"
+          fi
+          gh release view "$TAG" --json assets --jq '.assets[] | {name, size}'
+
+  ai-smoke:
+    name: "GitHub Models Responses API testen"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Responses API (models.github.ai) testen
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          RESPONSE=$(curl -sS -m 90 -w "\n%{http_code}" https://models.github.ai/inference/responses \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"model":"gpt-4.1-mini","input":"Antworte ausschließlich mit dem Wort: OK"}')
+          echo "$RESPONSE"
+          echo "$RESPONSE" | tail -1 | grep -q "200"
+          echo "$RESPONSE" | grep -q "OK"
+          echo "Responses API OK"

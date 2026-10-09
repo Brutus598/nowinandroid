@@ -1,0 +1,47 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Nordheim - Wikinger-Dorf"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+InputSetup="*res://scripts/autoload/input_setup.gd"
+Game="*res://scripts/autoload/game.gd"
+AiAdvisor="*res://scripts/autoload/ai_advisor.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/resizable=true
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=5
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="mobile"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.3, 0.5, 0.85, 1.0)
+
+[internationalization]
+
+locale/fallback="de"
+
+[layer_names]
+
+3d_physics/layer_1="Welt"
+3d_physics/layer_2="Dorfbewohner"

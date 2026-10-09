@@ -205,3 +205,22 @@ For more information on Compose compiler metrics, see [this blog post](https://m
 
 **Now in Android** is distributed under the terms of the Apache License (Version 2.0). See the
 [license](LICENSE) for more information.
+
+---
+
+## Viking Village – Wikinger-Dorf (3D-Spiel für Android)
+
+In diesem Repository liegt zusätzlich ein **komplett neues 3D-Dorfspiel im Wikinger-Stil**
+(inspiriert von Age of Empires) unter [`viking-village/`](viking-village/README.md):
+
+- **Godot 4.3**, vollständig prozedural: 3D-Animationen, Texturen, Wellen-Shader und
+  sogar der Sieges-Sound werden im Code erzeugt
+- Ressourcen: **Holz, Essen, Gold, Stein, Metall, Ölstein**
+- Gebäude: Langhaus, Lagerhaus, Schmiede, Große Halle (Sieg) + 3 Zeitalter
+- **KI-Berater „Sigrid die Seherin“** über die GitHub Models Responses API
+  (`https://models.github.ai/inference/responses`) mit Offline-Fallback
+- Android-APK & Linux-Build werden automatisch per
+  [GitHub Action](.github/workflows/viking-village.yml) gebaut und als
+  [Release](https://github.com/Brutus598/nowinandroid/releases) veröffentlicht
+
+Details, Steuerung und Bau-Anleitung: [`viking-village/README.md`](viking-village/README.md)
