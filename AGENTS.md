@@ -71,5 +71,8 @@ sandbox (`docker-compose.base44.yml`) provides two services:
 No external credentials are needed — the `demo` flavor uses static local data. The `prod`
 flavor would need a backend server (not publicly available) and Firebase config.
 
-To rebuild the APK after code changes: `docker compose -f docker-compose.base44.yml up build`.
-The Gradle cache is persisted in a named volume (`gradle-cache`) to speed up rebuilds.
+To rebuild the APK after code changes:
+`docker compose -f docker-compose.base44.yml run --rm build`
+(The build service uses a compose profile so it doesn't start on `up` — only the `web` service
+runs continuously.) The Gradle cache is persisted in a named volume (`gradle-cache`) to speed
+up rebuilds.

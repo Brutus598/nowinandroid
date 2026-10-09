@@ -2,10 +2,13 @@
 #
 # This is a native Android app (Kotlin / Jetpack Compose).  It cannot run
 # interactively in a web browser, so the preview shows the app's Roborazzi
-# screenshot tests in a gallery on port 3000, while a one-shot build service
-# compiles the demoDebug APK from source to prove the project builds.
+# screenshot tests in a gallery on port 3000.
 #
-# Usage:  docker compose -f docker-compose.base44.yml up -d --build
+# The demoDebug APK is built separately (one-shot, not part of the long-running
+# stack) to avoid the platform flagging an exited service:
+#   docker compose -f docker-compose.base44.yml run --rm build
+#
+# Usage:  docker compose -f docker-compose.base44.yml up -d
 
 services:
   # --- Web preview: screenshot gallery on port 3000 -----------------------
@@ -28,11 +31,13 @@ services:
       start_period: 5s
     restart: on-failure
 
-  # --- One-shot APK build (demoDebug) -------------------------------------
+  # --- One-shot APK build (demoDebug) — run manually, not on `up` ----------
+  # To build the APK:  docker compose -f docker-compose.base44.yml run --rm build
   build:
     build:
       context: .
       dockerfile: Dockerfile.base44
+    profiles: ["build"]
     volumes:
       - ./:/app
       - gradle-cache:/root/.gradle
