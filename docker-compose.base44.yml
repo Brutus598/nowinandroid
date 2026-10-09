@@ -1,0 +1,55 @@
+# Base44 sandbox — Now in Android.
+#
+# This is a native Android app (Kotlin / Jetpack Compose).  It cannot run
+# interactively in a web browser, so the preview shows the app's Roborazzi
+# screenshot tests in a gallery on port 3000, while a one-shot build service
+# compiles the demoDebug APK from source to prove the project builds.
+#
+# Usage:  docker compose -f docker-compose.base44.yml up -d --build
+
+services:
+  # --- Web preview: screenshot gallery on port 3000 -----------------------
+  web:
+    image: python:3.12-slim
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: ["python3", "tools/base44_preview_server.py"]
+    environment:
+      - PORT=3000
+      - BASE44_PREVIEW_MODE
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:3000/')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: on-failure
+
+  # --- One-shot APK build (demoDebug) -------------------------------------
+  build:
+    build:
+      context: .
+      dockerfile: Dockerfile.base44
+    volumes:
+      - ./:/app
+      - gradle-cache:/root/.gradle
+    working_dir: /app
+    command:
+      - sh
+      - -ec
+      - |
+        echo "sdk.dir=/opt/android-sdk" > local.properties
+        mkdir -p ~/.gradle
+        printf 'org.gradle.jvmargs=-Xmx2g -Xms512m -Dfile.encoding=UTF-8 -XX:+UseG1GC\norg.gradle.daemon=false\norg.gradle.parallel=true\norg.gradle.workers.max=2\norg.gradle.configuration-cache=false\norg.gradle.isolated-projects=false\nkotlin.incremental=false\n' > ~/.gradle/gradle.properties
+        exec ./gradlew assembleDemoDebug --no-daemon --stacktrace
+    environment:
+      - ANDROID_HOME=/opt/android-sdk
+      - ANDROID_SDK_ROOT=/opt/android-sdk
+      - BASE44_PREVIEW_MODE
+    restart: "no"
+
+volumes:
+  gradle-cache:

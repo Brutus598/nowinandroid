@@ -56,3 +56,20 @@ The app and Android libraries have two product flavors: `demo` and `prod`, and t
 ## Version control and code location
 
 - The project uses git and is hosted in https://github.com/android/nowinandroid.
+
+## Base44 sandbox setup
+
+This is a **native Android app** — it cannot run interactively in a web browser. The Base44
+sandbox (`docker-compose.base44.yml`) provides two services:
+
+- **`web`** (port 3000): A Python server (`tools/base44_preview_server.py`) that serves a
+  gallery of the app's Roborazzi screenshot tests so the UI is visible in the preview. It
+  dynamically checks for the built APK and shows a build-status badge.
+- **`build`** (one-shot): Compiles the `demoDebug` APK from source using JDK 21 + Android SDK 36
+  via `Dockerfile.base44`. The APK is written to `app/build/outputs/apk/demo/debug/`.
+
+No external credentials are needed — the `demo` flavor uses static local data. The `prod`
+flavor would need a backend server (not publicly available) and Firebase config.
+
+To rebuild the APK after code changes: `docker compose -f docker-compose.base44.yml up build`.
+The Gradle cache is persisted in a named volume (`gradle-cache`) to speed up rebuilds.
