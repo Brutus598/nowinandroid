@@ -23,8 +23,10 @@ import com.google.samples.apps.nowinandroid.core.designsystem.icon.NiaIcons
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.navigation.BookmarksNavKey
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
 import com.google.samples.apps.nowinandroid.feature.interests.api.navigation.InterestsNavKey
+import com.google.samples.apps.nowinandroid.feature.processmanager.api.navigation.ProcessManagerNavKey
 import com.google.samples.apps.nowinandroid.feature.bookmarks.api.R as bookmarksR
 import com.google.samples.apps.nowinandroid.feature.foryou.api.R as forYouR
+import com.google.samples.apps.nowinandroid.feature.processmanager.api.R as processManagerR
 import com.google.samples.apps.nowinandroid.feature.search.api.R as searchR
 
 /**
@@ -66,8 +68,16 @@ val INTERESTS = TopLevelNavItem(
     titleTextId = searchR.string.feature_search_api_interests,
 )
 
+val PROCESS_MANAGER = TopLevelNavItem(
+    selectedIcon = NiaIcons.Memory,
+    unselectedIcon = NiaIcons.MemoryBorder,
+    iconTextId = processManagerR.string.feature_processmanager_api_title,
+    titleTextId = processManagerR.string.feature_processmanager_api_title,
+)
+
 val TOP_LEVEL_NAV_ITEMS = mapOf(
     ForYouNavKey to FOR_YOU,
     BookmarksNavKey to BOOKMARKS,
     InterestsNavKey(null) to INTERESTS,
+    ProcessManagerNavKey to PROCESS_MANAGER,
 )

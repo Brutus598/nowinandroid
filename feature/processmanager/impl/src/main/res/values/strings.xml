@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2025 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          https://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="feature_processmanager_impl_title">Process Manager</string>
+    <string name="feature_processmanager_impl_scan">Scan</string>
+    <string name="feature_processmanager_impl_kill_selected">Kill Selected</string>
+    <string name="feature_processmanager_impl_kill_all">Kill All</string>
+    <string name="feature_processmanager_impl_select_all">Select All</string>
+    <string name="feature_processmanager_impl_deselect_all">Deselect All</string>
+    <string name="feature_processmanager_impl_loading">Scanning processes…</string>
+    <string name="feature_processmanager_impl_empty">No processes found</string>
+    <string name="feature_processmanager_impl_memory">Memory</string>
+    <string name="feature_processmanager_impl_cpu">CPU</string>
+    <string name="feature_processmanager_impl_runtime">Runtime</string>
+    <string name="feature_processmanager_impl_pid">PID</string>
+    <string name="feature_processmanager_impl_process_count">%1$d processes</string>
+    <string name="feature_processmanager_impl_selected_count">%1$d selected</string>
+    <string name="feature_processmanager_impl_kill_success">Killed %1$d process(es)</string>
+    <string name="feature_processmanager_impl_kill_fail">Could not kill some processes (requires permission)</string>
+    <string name="feature_processmanager_impl_permission_hint">Grant usage access in Settings for full process list</string>
+    <string name="feature_processmanager_impl_open_settings">Open Settings</string>
+    <string name="feature_processmanager_impl_background_process">Background</string>
+    <string name="feature_processmanager_impl_foreground_process">Foreground</string>
+</resources>

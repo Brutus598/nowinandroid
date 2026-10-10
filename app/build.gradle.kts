@@ -77,6 +77,8 @@ dependencies {
     implementation(projects.feature.search.api)
     implementation(projects.feature.search.impl)
     implementation(projects.feature.settings.impl)
+    implementation(projects.feature.processmanager.api)
+    implementation(projects.feature.processmanager.impl)
 
     implementation(projects.core.common)
     implementation(projects.core.ui)

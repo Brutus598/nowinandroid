@@ -79,6 +79,7 @@ import com.google.samples.apps.nowinandroid.feature.bookmarks.impl.navigation.bo
 import com.google.samples.apps.nowinandroid.feature.foryou.api.navigation.ForYouNavKey
 import com.google.samples.apps.nowinandroid.feature.foryou.impl.navigation.forYouEntry
 import com.google.samples.apps.nowinandroid.feature.interests.impl.navigation.interestsEntry
+import com.google.samples.apps.nowinandroid.feature.processmanager.impl.navigation.processManagerEntry
 import com.google.samples.apps.nowinandroid.feature.search.api.navigation.SearchNavKey
 import com.google.samples.apps.nowinandroid.feature.search.impl.navigation.searchEntry
 import com.google.samples.apps.nowinandroid.feature.settings.impl.SettingsDialog
@@ -262,6 +263,7 @@ internal fun NiaApp(
                         interestsEntry(navigator)
                         topicEntry(navigator)
                         searchEntry(navigator)
+                        processManagerEntry(navigator)
                     }
 
                     NavDisplay(
