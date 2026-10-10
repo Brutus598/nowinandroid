@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Prozess-Manager</string>
+
+    <!-- Startbildschirm -->
+    <string name="title_process_list">Prozesse</string>
+    <string name="subtitle_counts">%1$d aktiv · %2$d im Hintergrund · %3$d gesamt</string>
+    <string name="subtitle_no_scan">Tippe auf Scannen</string>
+
+    <!-- Scan -->
+    <string name="action_scan">Scannen</string>
+    <string name="action_rescan">Neu scannen</string>
+    <string name="state_scanning">Wird gescannt …</string>
+    <string name="scan_last">Letzter Scan: %1$s</string>
+
+    <!-- Aktionen -->
+    <string name="action_kill_selected">Auswahl beenden</string>
+    <string name="action_kill_selected_count">Auswahl beenden (%1$d)</string>
+    <string name="action_kill_all">Alle beenden</string>
+    <string name="action_select_all">Alle auswählen</string>
+    <string name="action_clear_selection">Auswahl aufheben</string>
+    <string name="action_kill_item">Prozess beenden</string>
+    <string name="selection_count">%1$d ausgewählt</string>
+    <string name="killable_summary">%1$d beendbar</string>
+
+    <!-- Filter -->
+    <string name="filter_all">Alle</string>
+    <string name="filter_foreground">Vordergrund</string>
+    <string name="filter_background">Hintergrund</string>
+    <string name="filter_inactive">Inaktiv</string>
+    <string name="filter_system">System</string>
+
+    <!-- Zustände -->
+    <string name="badge_foreground">Vordergrund</string>
+    <string name="badge_background">Hintergrund</string>
+    <string name="badge_inactive">Inaktiv</string>
+    <string name="badge_system">System</string>
+
+    <!-- Zusammenfassung -->
+    <string name="summary_active">Aktiv</string>
+    <string name="summary_background">Hintergrund</string>
+    <string name="summary_inactive">Inaktiv</string>
+    <string name="summary_memory">Arbeitsspeicher</string>
+    <string name="summary_memory_value">%1$s von %2$s belegt</string>
+    <string name="summary_low_memory">Speicher wird knapp</string>
+
+    <!-- Nutzungsdaten-Banner -->
+    <string name="usage_access_title">Vollständige Liste freischalten</string>
+    <string name="usage_access_body">Für alle Apps und Hintergrundprozesse wird der Sonderzugriff auf Nutzungsdaten benötigt.</string>
+    <string name="usage_access_action">Einstellungen öffnen</string>
+
+    <!-- Details -->
+    <string name="detail_package">Paket</string>
+    <string name="detail_process">Prozess</string>
+    <string name="detail_pid">PID</string>
+    <string name="detail_uid">UID</string>
+    <string name="detail_importance">Priorität</string>
+    <string name="detail_memory">Speicher (PSS)</string>
+    <string name="detail_uptime">Laufzeit</string>
+    <string name="detail_foreground_time">Vordergrundzeit</string>
+    <string name="detail_last_used">Zuletzt aktiv</string>
+    <string name="detail_source">Quelle</string>
+    <string name="source_running">Laufender Prozess</string>
+    <string name="source_usage">Nutzungsdaten</string>
+
+    <!-- Leerzustand -->
+    <string name="empty_title">Noch keine Prozesse</string>
+    <string name="empty_body">Tippe auf „Scannen“, um alle aktiven Prozesse und Hintergrunddienste zu erfassen.</string>
+    <string name="empty_filter_title">Keine Treffer</string>
+    <string name="empty_filter_body">Für diesen Filter wurden keine Prozesse gefunden.</string>
+
+    <!-- Info-Dialog -->
+    <string name="info_title">Hinweise &amp; Berechtigungen</string>
+    <string name="info_body">Android schützt fremde Prozesse: Über die öffentlichen APIs werden laufende Prozesse, Speicherverbrauch und Aktivitätszeiten sichtbar, das Beenden betrifft jedoch nur Hintergrundprozesse. Vordergrund- und Systemprozesse bleiben geschützt – optional kann der Root-Modus helfen.</string>
+    <string name="info_root">Root-Modus (erweitert)</string>
+    <string name="info_root_summary">Beendet auch Vordergrund-Apps per force-stop, sofern Root verfügbar ist.</string>
+    <string name="info_usage_status_on">Nutzungsdaten: gewährt</string>
+    <string name="info_usage_status_off">Nutzungsdaten: nicht gewährt</string>
+    <string name="action_close">Schließen</string>
+
+    <!-- Meldungen -->
+    <string name="event_scan_completed">%1$d Prozesse gefunden</string>
+    <string name="event_kill_success">%1$d Prozesse beendet</string>
+    <string name="event_kill_partial">%1$d beendet, %2$d geschützt/übersprungen</string>
+    <string name="event_kill_failed">Beenden nicht möglich</string>
+    <string name="event_kill_none">Nichts zu beenden – alle Einträge sind geschützt.</string>
+    <string name="event_scan_error">Scan fehlgeschlagen: %1$s</string>
+</resources>
